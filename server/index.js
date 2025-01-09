@@ -50,7 +50,7 @@ async function run() {
   try {
     // db
     const db = client.db("plant_store");
-    // const plantsCollection = db.collection('plants')
+    const plantsCollection = db.collection("plants");
     const userCollection = db.collection("user");
 
     // save user data in db   [TODO:fix bug while saving the data in the db via signUp gets null]
@@ -97,6 +97,13 @@ async function run() {
       } catch (err) {
         res.status(500).send(err);
       }
+    });
+
+    // sava a plant data in the DB
+    app.post("/plant", async (req, res) => {
+      const plant = req.body;
+      const result = await plantsCollection.insertOne(plant);
+      res.send(result);
     });
 
     console.log(
