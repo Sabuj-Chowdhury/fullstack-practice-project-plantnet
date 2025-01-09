@@ -48,6 +48,28 @@ const client = new MongoClient(uri, {
 });
 async function run() {
   try {
+    // db
+    const db = client.db("plant_store");
+    // const plantsCollection = db.collection('plants')
+    const userCollection = db.collection("user");
+
+    // save user data in db   [TODO:fix bug while saving the data in the db via signUp gets null]
+    app.post("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const users = req.body;
+      const query = { email };
+      const isExist = await userCollection.findOne(query);
+      if (isExist) {
+        return res.send(isExist);
+      }
+      const result = await userCollection.insertOne({
+        ...users,
+        timeStamp: Date.now(),
+        role: "customer",
+      });
+      res.send(result);
+    });
+
     // Generate jwt token
     app.post("/jwt", async (req, res) => {
       const email = req.body;
