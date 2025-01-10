@@ -106,6 +106,12 @@ async function run() {
       res.send(result);
     });
 
+    // get all plants data
+    app.get("/plants", async (req, res) => {
+      const result = await plantsCollection.find().toArray();
+      res.send(result);
+    });
+
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
