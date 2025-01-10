@@ -100,7 +100,7 @@ async function run() {
     });
 
     // sava a plant data in the DB
-    app.post("/plant", async (req, res) => {
+    app.post("/plant", verifyToken, async (req, res) => {
       const plant = req.body;
       const result = await plantsCollection.insertOne(plant);
       res.send(result);
