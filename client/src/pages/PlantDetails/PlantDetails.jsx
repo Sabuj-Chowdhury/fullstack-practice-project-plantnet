@@ -103,12 +103,19 @@ const PlantDetails = () => {
           <div className="flex justify-between">
             <p className="font-bold text-3xl text-gray-500">Price: {price}$</p>
             <div>
-              <Button label={quantity > 0 ? "Purchase" : "Out of Stock"} />
+              <Button
+                onClick={() => setIsOpen(true)}
+                label={quantity > 0 ? "Purchase" : "Out of Stock"}
+              />
             </div>
           </div>
           <hr className="my-6" />
 
-          <PurchaseModal closeModal={closeModal} isOpen={isOpen} />
+          <PurchaseModal
+            closeModal={closeModal}
+            isOpen={isOpen}
+            plant={plant}
+          />
 
           <div className="md:col-span-3 order-first md:order-last mb-10">
             {/* RoomReservation */}
