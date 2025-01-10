@@ -7,13 +7,26 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import PropTypes from "prop-types";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import Button from "../Shared/Button/Button";
 import useAuth from "../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 const PurchaseModal = ({ closeModal, isOpen, plant }) => {
+  const [totalQuantity, setTotalQuantity] = useState(1);
   const { name, category, quantity, price } = plant;
   const { user } = useAuth();
+  const handleQuantity = (value) => {
+    if (value > quantity) {
+      setTotalQuantity(quantity);
+      return toast.error("Quantity exceeds available stock");
+    }
+    if (value < 0) {
+      setTotalQuantity(1);
+      return toast.error("Quantity can not be less then 1");
+    }
+    setTotalQuantity(value);
+  };
   // Total Price Calculation
 
   return (
@@ -76,7 +89,8 @@ const PurchaseModal = ({ closeModal, isOpen, plant }) => {
                       Quantity :
                     </label>
                     <input
-                      max={quantity}
+                      value={totalQuantity}
+                      onChange={(e) => handleQuantity(e.target.value)}
                       className=" p-2 text-gray-800 border border-lime-300 focus:outline-lime-500 rounded-md bg-white"
                       name="quantity"
                       id="quantity"
