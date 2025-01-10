@@ -108,7 +108,15 @@ async function run() {
 
     // get all plants data
     app.get("/plants", async (req, res) => {
-      const result = await plantsCollection.find().toArray();
+      const result = await plantsCollection.find().limit(20).toArray();
+      res.send(result);
+    });
+
+    // get plant details by id
+    app.get("/plant/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await plantsCollection.findOne(query);
       res.send(result);
     });
 
