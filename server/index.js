@@ -52,6 +52,7 @@ async function run() {
     const db = client.db("plant_store");
     const plantsCollection = db.collection("plants");
     const userCollection = db.collection("user");
+    const orderCollection = db.collection("orders");
 
     // save user data in db   [TODO:fix bug while saving the data in the db via signUp gets null]
     app.post("/users/:email", async (req, res) => {
@@ -117,6 +118,13 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await plantsCollection.findOne(query);
+      res.send(result);
+    });
+
+    // save order info in the db
+    app.post("/orders", verifyToken, async (req, res) => {
+      const order = req.body;
+      const result = await orderCollection.insertOne(order);
       res.send(result);
     });
 
