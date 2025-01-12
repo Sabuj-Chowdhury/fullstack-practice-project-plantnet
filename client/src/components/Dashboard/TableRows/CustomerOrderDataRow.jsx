@@ -77,6 +77,7 @@ const CustomerOrderDataRow = ({ order, refetch }) => {
         <DeleteModal
           handleDelete={handleDelete}
           isOpen={isOpen}
+          status={status}
           closeModal={closeModal}
         />
       </td>

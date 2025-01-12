@@ -7,7 +7,7 @@ import {
 } from "@headlessui/react";
 import { Fragment } from "react";
 import PropTypes from "prop-types";
-const DeleteModal = ({ closeModal, isOpen, handleDelete }) => {
+const DeleteModal = ({ closeModal, isOpen, handleDelete, status }) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -50,8 +50,16 @@ const DeleteModal = ({ closeModal, isOpen, handleDelete }) => {
                 <div className="flex mt-2 justify-around">
                   <button
                     onClick={handleDelete}
+                    disabled={status === "delivered"}
                     type="button"
-                    className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                    className={`inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2
+                      ${
+                        status === "delivered"
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
+                      }
+                      
+                      `}
                   >
                     Yes
                   </button>
