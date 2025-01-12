@@ -12,13 +12,15 @@ import Button from "../Shared/Button/Button";
 
 import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const PurchaseModal = ({ closeModal, isOpen, plant }) => {
   const { user } = useAuth();
   const { name, category, quantity, price, _id, seller } = plant;
-
+  const axiosSecure = useAxiosSecure();
   const [totalQuantity, setTotalQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(price);
+
   const [order, setOrder] = useState({
     plantId: _id,
     price: totalPrice,
@@ -46,15 +48,23 @@ const PurchaseModal = ({ closeModal, isOpen, plant }) => {
   };
   // submit
   const handlePurchase = async () => {
-    //api to call
-    console.table({
+    const orderInfo = {
       ...order,
       customer: {
         name: user?.displayName,
         email: user?.email,
         image: user?.photoURL,
       },
-    });
+    };
+
+    //api to call save order info in db
+
+    try {
+      axiosSecure.post("/orders", orderInfo);
+      toast.success("order Placed!");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
