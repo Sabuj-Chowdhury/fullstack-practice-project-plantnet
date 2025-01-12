@@ -142,6 +142,16 @@ async function run() {
       res.send(result);
     });
 
+    // get all orders for specific logged in user
+    app.get("/orders/:email", verifyToken, async (req, res) => {
+      const email = req.params.email;
+      const query = {
+        "customer.email": email,
+      };
+      const result = await orderCollection.find(query).toArray();
+      res.send(result);
+    });
+
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
