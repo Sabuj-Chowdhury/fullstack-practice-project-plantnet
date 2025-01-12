@@ -21,7 +21,11 @@ const PlantDetails = () => {
     setIsOpen(false);
   };
 
-  const { data: plant = {}, isLoading } = useQuery({
+  const {
+    data: plant = {},
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["plant", id],
     queryFn: async () => {
       const { data } = await axios.get(
@@ -116,6 +120,7 @@ const PlantDetails = () => {
             closeModal={closeModal}
             isOpen={isOpen}
             plant={plant}
+            refetch={refetch}
           />
 
           <div className="md:col-span-3 order-first md:order-last mb-10">

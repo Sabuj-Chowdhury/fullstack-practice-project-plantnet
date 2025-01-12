@@ -23,7 +23,7 @@ const AddPlant = () => {
     const form = e.target;
     const name = form.name.value;
     const price = parseFloat(form.price.value);
-    const quantity = form.quantity.value;
+    const quantity = parseInt(form.quantity.value);
     const description = form.description.value;
     const category = form.category.value;
     const image = form.image.files[0];
@@ -56,7 +56,7 @@ const AddPlant = () => {
     } finally {
       setLoading(false);
     }
-    console.log(plant);
+    // console.log(plant);
   };
 
   return (

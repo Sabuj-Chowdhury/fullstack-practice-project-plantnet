@@ -14,7 +14,8 @@ import toast from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
-const PurchaseModal = ({ closeModal, isOpen, plant }) => {
+const PurchaseModal = ({ closeModal, isOpen, plant, refetch }) => {
+  // console.log(refetch);
   const { user } = useAuth();
   const { name, category, quantity, price, _id, seller } = plant;
   const axiosSecure = useAxiosSecure();
@@ -35,7 +36,7 @@ const PurchaseModal = ({ closeModal, isOpen, plant }) => {
       setTotalQuantity(quantity);
       return toast.error("Quantity exceeds available stock");
     }
-    if (value <= 0) {
+    if (value < 0) {
       setTotalQuantity(1);
       return toast.error("Quantity can not be less then 1");
     }
@@ -46,24 +47,30 @@ const PurchaseModal = ({ closeModal, isOpen, plant }) => {
       return { ...pre, price: value * price, quantity: value };
     });
   };
+  const orderInfo = {
+    ...order,
+    customer: {
+      name: user?.displayName,
+      email: user?.email,
+      image: user?.photoURL,
+    },
+  };
   // submit
   const handlePurchase = async () => {
-    const orderInfo = {
-      ...order,
-      customer: {
-        name: user?.displayName,
-        email: user?.email,
-        image: user?.photoURL,
-      },
-    };
-
     //api to call save order info in db
 
     try {
-      axiosSecure.post("/orders", orderInfo);
+      await axiosSecure.post("/orders", orderInfo);
+      await axiosSecure.patch(`/plants/quantity/${_id}`, {
+        quantityNum: totalQuantity,
+      });
+
       toast.success("order Placed!");
+      refetch();
     } catch (err) {
       console.log(err);
+    } finally {
+      closeModal();
     }
   };
 
