@@ -11,6 +11,7 @@ import LoadingSpinner from "../../components/Shared/LoadingSpinner";
 
 const PlantDetails = () => {
   let [isOpen, setIsOpen] = useState(false);
+  // console.log(user);
 
   // id
   const { id } = useParams();
