@@ -1,11 +1,37 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import DeleteModal from "../../Modal/DeleteModal";
-const CustomerOrderDataRow = ({ order }) => {
-  const { image, name, category, price, quantity, status } = order;
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
+const CustomerOrderDataRow = ({ order, refetch }) => {
+  const { image, name, category, price, quantity, status, plantId, _id } =
+    order;
   // console.log(order);
   let [isOpen, setIsOpen] = useState(false);
   const closeModal = () => setIsOpen(false);
+  const axiosSecure = useAxiosSecure();
+
+  const handleDelete = async () => {
+    // console.log(plantId);
+
+    // api call to cancel/delete order
+    try {
+      // delete the data
+      await axiosSecure.delete(`/order/delete/${_id}`);
+      toast.success("deleted");
+      // increase quantity
+      await axiosSecure.patch(`/plants/quantity/${plantId}`, {
+        quantityNum: quantity,
+        status: "increase",
+      });
+      // refresh UI
+      refetch();
+    } catch (err) {
+      console.log(err);
+    } finally {
+      closeModal();
+    }
+  };
 
   return (
     <tr>
@@ -36,7 +62,7 @@ const CustomerOrderDataRow = ({ order }) => {
         <p className="text-gray-900 whitespace-no-wrap">{quantity}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 whitespace-no-wrap">{quantity}</p>
+        <p className="text-gray-900 whitespace-no-wrap">{status}</p>
       </td>
 
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -48,7 +74,11 @@ const CustomerOrderDataRow = ({ order }) => {
           <span className="relative cursor-pointer">Cancel</span>
         </button>
 
-        <DeleteModal isOpen={isOpen} closeModal={closeModal} />
+        <DeleteModal
+          handleDelete={handleDelete}
+          isOpen={isOpen}
+          closeModal={closeModal}
+        />
       </td>
     </tr>
   );
