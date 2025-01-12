@@ -132,12 +132,19 @@ async function run() {
     app.patch("/plants/quantity/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
-      const { quantityNum } = req.body;
+      const { quantityNum, status } = req.body;
       let updateDoc = {
         $inc: {
           quantity: -quantityNum,
         },
       };
+      if (status === "increase") {
+        updateDoc = {
+          $inc: {
+            quantity: quantityNum,
+          },
+        };
+      }
       const result = await plantsCollection.updateOne(filter, updateDoc);
       res.send(result);
     });
@@ -195,6 +202,20 @@ async function run() {
           },
         ])
         .toArray();
+      res.send(result);
+    });
+
+    // cancel/delete order
+    app.delete("/order/delete/:id", verifyToken, async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const order = await orderCollection.findOne(query);
+      if (order.status === "delivered") {
+        return res
+          .status(409)
+          .send({ message: "Can not delete once delivered" });
+      }
+      const result = await orderCollection.deleteOne(query);
       res.send(result);
     });
 
