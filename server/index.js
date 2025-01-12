@@ -143,12 +143,58 @@ async function run() {
     });
 
     // get all orders for specific logged in user
+    // app.get("/orders/:email", verifyToken, async (req, res) => {
+    //   const email = req.params.email;
+    //   const query = {
+    //     "customer.email": email,
+    //   };
+    //   const result = await orderCollection.find(query).toArray();
+    //   res.send(result);
+    // });
+
+    // get all orders for specific logged in user using aggregation
     app.get("/orders/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
-      const query = {
-        "customer.email": email,
-      };
-      const result = await orderCollection.find(query).toArray();
+      const result = await orderCollection
+        .aggregate([
+          {
+            $match: {
+              "customer.email": email, //Match specific customers data only by email
+            },
+          },
+          {
+            $addFields: {
+              plantId: { $toObjectId: "$plantId" }, //convert plantId string field to objectId field
+            },
+          },
+          {
+            $lookup: {
+              // go to a different collection and look for data
+              from: "plants", // collection name
+              localField: "plantId", // local data that need to match
+              foreignField: "_id", // foreign field name of that same data
+              as: "plants", // return the data as plants array (array naming)
+            },
+          },
+          {
+            $unwind: "$plants", // unwind lookup result, return without array
+          },
+          {
+            $addFields: {
+              // add these fields in order object
+              image: "$plants.image",
+              name: "$plants.name",
+              category: "$plants.category",
+            },
+          },
+          {
+            // remove plants object property from order object
+            $project: {
+              plants: 0,
+            },
+          },
+        ])
+        .toArray();
       res.send(result);
     });
 
