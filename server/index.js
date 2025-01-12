@@ -128,6 +128,20 @@ async function run() {
       res.send(result);
     });
 
+    // manage quantity
+    app.patch("/plants/quantity/:id", verifyToken, async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const { quantityNum } = req.body;
+      let updateDoc = {
+        $inc: {
+          quantity: -quantityNum,
+        },
+      };
+      const result = await plantsCollection.updateOne(filter, updateDoc);
+      res.send(result);
+    });
+
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
