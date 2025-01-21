@@ -49,10 +49,11 @@ const PlantDetails = () => {
       <div className="mx-auto flex flex-col lg:flex-row justify-between w-full gap-12">
         {/* Header */}
         <div className="flex flex-col gap-6 flex-1">
+          {/* product image */}
           <div>
-            <div className="w-full overflow-hidden rounded-xl">
+            <div className="w-full h-[500px] overflow-hidden rounded-xl">
               <img
-                className="object-cover w-full"
+                className="object-cover w-full h-full"
                 src={image}
                 alt="header image"
               />
@@ -82,7 +83,7 @@ const PlantDetails = () => {
               "
           >
             <div>{seller?.name}</div>
-
+            {/* seller image */}
             <img
               className="rounded-full"
               height="30"
