@@ -107,7 +107,7 @@ async function run() {
       res.send(result);
     });
 
-    // get all plants data
+    // Homepage get all plants data
     app.get("/plants", async (req, res) => {
       const result = await plantsCollection.find().limit(20).toArray();
       res.send(result);
