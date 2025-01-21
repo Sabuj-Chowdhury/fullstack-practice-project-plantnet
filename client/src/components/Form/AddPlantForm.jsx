@@ -1,7 +1,13 @@
 import PropTypes from "prop-types";
 import { TbFidgetSpinner } from "react-icons/tb";
 
-const AddPlantForm = ({ handleSubmit, uploadText, setUploadText, loading }) => {
+const AddPlantForm = ({
+  handleSubmit,
+  handleImageChange,
+  selectedImage,
+  loading,
+}) => {
+  console.log(typeof selectedImage);
   return (
     <div className="w-full min-h-[calc(100vh-40px)] flex flex-col justify-center items-center text-gray-800 rounded-xl bg-gray-50">
       <form onSubmit={handleSubmit}>
@@ -87,21 +93,27 @@ const AddPlantForm = ({ handleSubmit, uploadText, setUploadText, loading }) => {
             {/* Image */}
             <div className=" p-4  w-full  m-auto rounded-lg flex-grow">
               <div className="file_upload px-5 py-3 relative border-4 border-dotted border-gray-300 rounded-lg">
-                <div className="flex flex-col w-max mx-auto text-center">
-                  <label>
-                    <input
-                      onChange={(e) => setUploadText(e.target.files[0].name)}
-                      className="text-sm cursor-pointer w-36 hidden"
-                      type="file"
-                      name="image"
-                      id="image"
-                      accept="image/*"
-                      hidden
-                    />
-                    <div className="bg-lime-500 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-lime-500">
-                      {uploadText}
-                    </div>
+                <div>
+                  <label className="block text-teal-700 font-medium mb-1">
+                    Image
                   </label>
+
+                  <input
+                    type="file"
+                    name="image"
+                    required
+                    onChange={handleImageChange}
+                    className="w-full p-2 border outline-none border-gray-300 rounded "
+                  />
+                  {selectedImage && (
+                    <div className="mt-3">
+                      <img
+                        src={selectedImage}
+                        alt="Selected"
+                        className="w-20 h-20  object-contain"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -128,7 +140,7 @@ export default AddPlantForm;
 
 AddPlantForm.propTypes = {
   handleSubmit: PropTypes.func,
-  uploadText: PropTypes.string,
-  setUploadText: PropTypes.func,
+  handleImageChange: PropTypes.func,
+  selectedImage: PropTypes.string,
   loading: PropTypes.bool,
 };

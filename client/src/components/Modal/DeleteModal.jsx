@@ -82,6 +82,7 @@ const DeleteModal = ({ closeModal, isOpen, handleDelete, status }) => {
 
 DeleteModal.propTypes = {
   id: PropTypes.string,
+  status: PropTypes.string,
   modalHandler: PropTypes.func,
   closeModal: PropTypes.func,
   isOpen: PropTypes.bool,

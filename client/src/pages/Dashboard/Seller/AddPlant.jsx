@@ -10,12 +10,19 @@ import { useNavigate } from "react-router-dom";
 
 const AddPlant = () => {
   const { user } = useAuth();
-  const [uploadText, setUploadText] = useState("Image Upload");
+
   const [loading, setLoading] = useState(false);
-  // setLoading(true);
-  // console.log(user);
+
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const image = e.target.files[0];
+    if (image) {
+      setSelectedImage(URL.createObjectURL(image));
+    }
+  };
 
   // handle form data
   const handleSubmit = async (e) => {
@@ -59,7 +66,6 @@ const AddPlant = () => {
     } finally {
       setLoading(false);
     }
-    // console.log(plant);
   };
 
   return (
@@ -71,9 +77,9 @@ const AddPlant = () => {
       {/* Form */}
       <AddPlantForm
         handleSubmit={handleSubmit}
-        uploadText={uploadText}
-        setUploadText={setUploadText}
+        handleImageChange={handleImageChange}
         loading={loading}
+        selectedImage={selectedImage}
       />
     </div>
   );
