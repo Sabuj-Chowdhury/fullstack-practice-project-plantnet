@@ -3,16 +3,26 @@ import { GrUserAdmin } from "react-icons/gr";
 import MenuItem from "./MenuItem";
 import { useState } from "react";
 import BecomeSellerModal from "../../../Modal/BecomeSellerModal";
+import useAuth from "../../../../hooks/useAuth";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 const CustomerMenu = () => {
+  const { user } = useAuth();
+  console.log(user);
+  const axiosSecure = useAxiosSecure();
   const [isOpen, setIsOpen] = useState(false);
 
   const closeModal = () => {
     setIsOpen(false);
   };
 
+  // TODO: Fix Bug
   const requestHandel = async () => {
     try {
       // send request
+      const { data } = await axiosSecure.patch(`/user/user?.email`);
+      console.log(data);
+      toast.success("Request successfully!");
     } catch (err) {
       console.log(err);
     }
