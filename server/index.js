@@ -100,11 +100,11 @@ async function run() {
       res.send(result);
     });
 
-    // mange user role and request
+    // mange user role and request TODO: fix bug
     app.patch("/user/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
       // const { status } = req.body;
-      const query = { email };
+      const filter = { email };
       const user = await userCollection.findOne(email);
       if (!user || user.status === "requested") {
         return res.send({
@@ -113,10 +113,10 @@ async function run() {
       }
       const updateDoc = {
         $set: {
-          status: "requested",
+          role: "requested",
         },
       };
-      const result = await userCollection.updateOne(query, updateDoc);
+      const result = await userCollection.updateOne(filter, updateDoc);
       res.send(result);
     });
 
