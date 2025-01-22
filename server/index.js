@@ -54,23 +54,6 @@ async function run() {
     const userCollection = db.collection("user");
     const orderCollection = db.collection("orders");
 
-    // save user data in db
-    app.post("/users/:email", async (req, res) => {
-      const email = req.params.email;
-      const users = req.body;
-      const query = { email };
-      const isExist = await userCollection.findOne(query);
-      if (isExist) {
-        return res.send(isExist);
-      }
-      const result = await userCollection.insertOne({
-        ...users,
-        timeStamp: Date.now(),
-        role: "customer",
-      });
-      res.send(result);
-    });
-
     // Generate jwt token
     app.post("/jwt", async (req, res) => {
       const email = req.body;
@@ -98,6 +81,43 @@ async function run() {
       } catch (err) {
         res.status(500).send(err);
       }
+    });
+
+    // save user data in db
+    app.post("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const users = req.body;
+      const query = { email };
+      const isExist = await userCollection.findOne(query);
+      if (isExist) {
+        return res.send(isExist);
+      }
+      const result = await userCollection.insertOne({
+        ...users,
+        timeStamp: Date.now(),
+        role: "customer",
+      });
+      res.send(result);
+    });
+
+    // mange user role and request
+    app.patch("/user/:email", verifyToken, async (req, res) => {
+      const email = req.params.email;
+      // const { status } = req.body;
+      const query = { email };
+      const user = await userCollection.findOne(email);
+      if (!user || user.status === "requested") {
+        return res.send({
+          message: "Already request!Please wait for the decision.",
+        });
+      }
+      const updateDoc = {
+        $set: {
+          status: "requested",
+        },
+      };
+      const result = await userCollection.updateOne(query, updateDoc);
+      res.send(result);
     });
 
     // sava a plant data in the DB
