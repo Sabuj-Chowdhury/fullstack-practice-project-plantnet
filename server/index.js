@@ -54,7 +54,7 @@ async function run() {
     const userCollection = db.collection("user");
     const orderCollection = db.collection("orders");
 
-    // save user data in db   [TODO:fix bug while saving the data in the db via signUp gets null]
+    // save user data in db
     app.post("/users/:email", async (req, res) => {
       const email = req.params.email;
       const users = req.body;
