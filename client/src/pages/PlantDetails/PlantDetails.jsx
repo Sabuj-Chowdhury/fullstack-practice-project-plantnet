@@ -123,11 +123,6 @@ const PlantDetails = () => {
             plant={plant}
             refetch={refetch}
           />
-
-          <div className="md:col-span-3 order-first md:order-last mb-10">
-            {/* RoomReservation */}
-            {/* <RoomReservation room={room} /> */}
-          </div>
         </div>
       </div>
     </Container>

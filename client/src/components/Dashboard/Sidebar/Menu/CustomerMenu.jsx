@@ -10,6 +10,14 @@ const CustomerMenu = () => {
     setIsOpen(false);
   };
 
+  const requestHandel = async () => {
+    try {
+      // send request
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <MenuItem icon={BsFingerprint} label="My Orders" address="my-orders" />
@@ -23,7 +31,11 @@ const CustomerMenu = () => {
         <span className="mx-4 font-medium">Become A Seller</span>
       </button>
 
-      <BecomeSellerModal closeModal={closeModal} isOpen={isOpen} />
+      <BecomeSellerModal
+        requestHandel={requestHandel}
+        closeModal={closeModal}
+        isOpen={isOpen}
+      />
     </>
   );
 };

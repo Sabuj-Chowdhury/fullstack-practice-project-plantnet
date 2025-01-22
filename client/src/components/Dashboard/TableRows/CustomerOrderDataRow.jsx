@@ -18,7 +18,7 @@ const CustomerOrderDataRow = ({ order, refetch }) => {
     try {
       // delete the data
       await axiosSecure.delete(`/order/delete/${_id}`);
-      toast.success("deleted");
+      // toast.success("deleted");
       // increase quantity
       await axiosSecure.patch(`/plants/quantity/${plantId}`, {
         quantityNum: quantity,
@@ -26,8 +26,9 @@ const CustomerOrderDataRow = ({ order, refetch }) => {
       });
       // refresh UI
       refetch();
+      toast.success("Order Canceled!");
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data);
     } finally {
       closeModal();
     }
