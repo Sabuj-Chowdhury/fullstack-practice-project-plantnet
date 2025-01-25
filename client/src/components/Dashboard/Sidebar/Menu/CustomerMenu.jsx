@@ -8,7 +8,7 @@ import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 const CustomerMenu = () => {
   const { user } = useAuth();
-  console.log(user);
+  // console.log(user);
   const axiosSecure = useAxiosSecure();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -20,11 +20,11 @@ const CustomerMenu = () => {
   const requestHandel = async () => {
     try {
       // send request
-      const { data } = await axiosSecure.patch(`/user/user?.email`);
+      const { data } = await axiosSecure.patch(`/user/${user?.email}`);
       console.log(data);
-      toast.success("Request successfully!");
+      toast.success("successfully applied to become seller!");
     } catch (err) {
-      console.log(err);
+      toast.error(err.response.data.message);
     }
   };
 
