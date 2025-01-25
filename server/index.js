@@ -103,20 +103,19 @@ async function run() {
     // mange user role and request TODO: fix bug
     app.patch("/user/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
-      // const { status } = req.body;
-      const filter = { email };
-      const user = await userCollection.findOne(email);
+      const query = { email };
+      const user = await userCollection.findOne(query);
       if (!user || user.status === "requested") {
-        return res.send({
-          message: "Already request!Please wait for the decision.",
+        return res.status(400).send({
+          message: "Already requested!Please wait for the decision.",
         });
       }
       const updateDoc = {
         $set: {
-          role: "requested",
+          status: "requested",
         },
       };
-      const result = await userCollection.updateOne(filter, updateDoc);
+      const result = await userCollection.updateOne(query, updateDoc);
       res.send(result);
     });
 
