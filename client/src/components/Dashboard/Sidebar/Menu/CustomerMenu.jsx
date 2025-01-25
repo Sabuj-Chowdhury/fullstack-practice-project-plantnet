@@ -16,7 +16,6 @@ const CustomerMenu = () => {
     setIsOpen(false);
   };
 
-  // TODO: Fix Bug
   const requestHandel = async () => {
     try {
       // send request
@@ -25,6 +24,8 @@ const CustomerMenu = () => {
       toast.success("successfully applied to become seller!");
     } catch (err) {
       toast.error(err.response.data.message);
+    } finally {
+      closeModal();
     }
   };
 
