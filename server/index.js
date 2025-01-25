@@ -100,7 +100,7 @@ async function run() {
       res.send(result);
     });
 
-    // mange user role and request TODO: fix bug
+    // mange user role and request
     app.patch("/user/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
       const query = { email };
@@ -117,6 +117,13 @@ async function run() {
       };
       const result = await userCollection.updateOne(query, updateDoc);
       res.send(result);
+    });
+
+    // get user role
+    app.get("/user/role/:email", async (req, res) => {
+      const email = req.params.email;
+      const result = await userCollection.findOne({ email });
+      res.send({ role: result?.role });
     });
 
     // sava a plant data in the DB
