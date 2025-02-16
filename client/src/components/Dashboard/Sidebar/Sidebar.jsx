@@ -2,7 +2,7 @@ import { useState } from "react";
 import { GrLogout } from "react-icons/gr";
 import { FcSettings } from "react-icons/fc";
 import { AiOutlineBars } from "react-icons/ai";
-import { BsGraphUp } from "react-icons/bs";
+
 import MenuItem from "./Menu/MenuItem";
 
 import useAuth from "../../../hooks/useAuth";
@@ -73,15 +73,9 @@ const Sidebar = () => {
           <div className="flex flex-col justify-between flex-1 mt-6">
             <nav>
               {/*  Menu Items */}
-              <CustomerMenu />
-              <SellerMenu />
-
-              <MenuItem
-                icon={BsGraphUp}
-                label="Statistics"
-                address="/dashboard"
-              />
-              <AdminMenu />
+              {role === "customer" && <CustomerMenu />}
+              {role === "seller" && <SellerMenu />}
+              {role === "admin" && <AdminMenu />}
             </nav>
           </div>
         </div>
